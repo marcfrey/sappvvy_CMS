@@ -1,0 +1,181 @@
+@font-face {
+    font-family: title;
+    src: url(fonts/Poppins/Poppins-Light.ttf);
+}
+
+@font-face {
+    font-family: blocktext;
+    src: url(fonts/Poppins/Poppins-Regular.ttf);
+}
+
+
+html {
+    /* https://webgradients.com/ */
+    --col1st: #fbc2eb;
+    --col2nd: #91a398;
+    --col3rd: #1E1E1E;
+    --col4th: #252526;
+    --col5th: #333333;
+    --col6th: #CE916A;
+}
+
+body {
+    width: calc(50% - 40px);
+    margin: 0 0 0 50%;
+    background: var(--col3rd);
+    padding: 20px;
+}
+
+body > div {
+    padding: 20px;
+    margin: 20px;
+    background: var(--col5th);
+}
+
+body > iframe {
+    width: 50%;
+    position: fixed;
+    left: 0;
+    border: 0;
+    top: 0;
+    height: 100vh;
+    background: white;
+}
+
+@keyframes buttonAnimation {
+    
+    0%  {
+        background-color: var(--col3rd);
+        color: var(--col2nd);
+    }
+    50% {
+        background-color: var(--col3rd);
+        color: var(--col6th);
+    }
+    100% {
+            background-color: var(--col3rd);
+            color: var(--col2nd);
+    }
+}
+
+h1, h2, h3 {
+    font-family: title;
+    color: var(--col2nd);
+}
+
+p, span, li, a, input:placeholder-shown, input, button {
+    font-family: blocktext;
+    color: var(--col2nd);
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+/**
+    SelectionList
+*/
+.selectMove {
+    display: flex;
+}
+
+.selectMove > div, 
+.selectMove > ul {
+    flex-basis: 50%;
+    position: relative;
+}
+
+
+.selectMove li {
+    display: inline-block;
+    line-height: 20px;
+    position: relative;
+    transition: all .5s;
+    width: 100%;
+    background-image: none;
+    background-color: var(--col2nd);
+    margin: 5px 20px;
+    padding: 10px;
+    width: calc(100% - 80px);
+    color: var(--col3rd);
+
+}
+
+.selectMove li:hover {
+    transform: scale(1.2);
+}
+
+.selectMove li div {
+    position: absolute;
+    background: url("./icons/cancel.png");
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    cursor: pointer;
+    right: 20px;
+}
+
+.selectMove li.toRemove {
+    background-color: crimson;
+    background-image: none;
+}
+
+.selectMove input {
+    line-height: 19px;
+    outline: 0;
+    width: 80%;
+}
+
+.selectMove input {
+    width: 80%;
+}
+
+.selectMove .add {
+    right: 0;
+    border: 0;
+    line-height: 27px;
+    position: absolute;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: all .5s;
+    background-color: var(--col3rd);
+}
+
+/**
+generate button
+*/
+#generate {
+    position: fixed;
+    top: 0;
+    margin: 0;
+    width: 50%;
+    text-align: center;
+    padding: 0;
+    background: none;
+    left: 0;
+    display: block;
+}
+
+#generate button {
+    border-radius: 40px;
+    border: 0;
+    padding: 10px 40px 10px 80px;
+    font-size: 20px;
+    cursor: pointer;
+    animation: buttonAnimation;
+    animation-duration: 15s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    background-image: url("icons/saveJSON.png");
+    background-position: left 30px center;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 40px;
+    top: 20px;
+    box-shadow: 0px 0px 5px 5px white;
+    transition: all .5s;
+}

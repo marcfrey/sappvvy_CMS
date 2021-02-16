@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="cms.css" rel="stylesheet" type="text/css">
+    <link href="dragNDrop.css" rel="stylesheet" type="text/css">
+    <title>Content Management</title>
+</head>
+<body>
+    <iframe src="../index.html"></iframe>
+    <h1>Content Management</h1>
+    
+    <div id="generate"><button>save new content</button></div>
+    
+    
+    
+    <div id="menu" class="selectMove">
+        <div>
+            <h2>Sections</h2>
+            <p>Add or remove sections to your menu, which defines the page structure. The refered section needs to exists.</p>
+            <input placeholder="add section"><button class="add">add</button>
+        </div>
+        <ul></ul>
+    </div>
+
+    <div class="slider">
+        <div>
+            <h2>Start</h2>
+        </div>
+        <input placeholder="first heading">
+        <input placeholder="second heading">
+
+        <ul>
+            <li class="draggable" draggable="true">img/insel-1.jpg</li>
+            <li class="draggable" draggable="true">img/insel-2.jpg</li>
+        </ul>
+
+    </div>
+
+</body>
+<script type="module">
+
+    import * as edit from "./edit.js"
+
+    edit.loadContent()
+
+</script>
+
+</html>
