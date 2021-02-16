@@ -28,7 +28,7 @@ body {
 
 body > div {
     padding: 20px;
-    margin: 20px;
+    margin: 20px 0;
     background: var(--col5th);
 }
 

@@ -1,9 +1,8 @@
-import readFilePromise from "../JSONReader.js"
+import readFilePromise from "./JSONReader.js"
 import buildList from "./moveList.js"
 
 /**
  * - Prüfen ob Typ definiert
- * 
  */
 function buildCMS(data) {
     // sections
@@ -26,15 +25,13 @@ function buildCMS(data) {
     }
 }
 
-
-
 function loadContent() {
-   return readFilePromise("../data/sections.json").then((data => buildCMS(data)))
+   return readFilePromise("../content/data/sections.json").then((data => buildCMS(data)))
 }
 
 
 // function toJSON()
 
-export {loadContent}
+export { loadContent }
 
  
