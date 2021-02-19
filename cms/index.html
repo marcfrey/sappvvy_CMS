@@ -5,16 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="cms.css" rel="stylesheet" type="text/css">
-    <link href="dragNDrop.css" rel="stylesheet" type="text/css">
+    <link href="elements/dragNDrop/dragNDrop.css" rel="stylesheet" type="text/css">
     <title>Content Management</title>
 </head>
 <body>
-    <iframe src="../content/index.html"></iframe>
+    <iframe src="./dynamicView.html"></iframe>
     <h1>Content Management</h1>
     
     <div id="generate"><button>save new content</button></div>
-    
-    
     
     <div id="menu" class="selectMove">
         <div>
@@ -42,9 +40,13 @@
 </body>
 <script type="module">
 
-    import * as edit from "./edit.js"
+    import * as edit from "./js/site.js"
+    import copyHtml from "./js/copyHtml.js"
 
     edit.loadContent()
+
+    copyHtml("../content/index.html")
+    document.getElementsByTagName("iframe")[0].contentWindow.location.reload()
 
 </script>
 

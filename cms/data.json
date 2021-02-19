@@ -1,0 +1,48 @@
+{
+
+    "menu": ["Start", "Welcoming", "Location", "Contact"], 
+
+    "Start": [
+        {"type": "slider"},
+        {
+            "h1": "Hanldey's Island Properties",
+            "h2": "welcome to"
+        }, { "img": {"src": "../content/img/insel-1.jpg"} }, 
+        { "img": {"src": "../content/img/insel-2.jpg"} }
+    ],
+    
+    "Welcoming": [
+        {"type": "text"},
+        {
+            "text": ["Private Island in the Bras d’Or Lake",
+                    "with base on land ",
+                    "in St. Peters (Cape Breton, Nova Scotia, Canada)"],
+            "gallery": [
+                {"src":  "../content/img/icons/map_novascotia.png"},
+                {"src":  "../content/img/icons/map_canada.png"}
+            ]
+        }
+    ], 
+
+    "Contact": [
+        {"type": "link"},
+        {
+            "title": "contact us",
+            "buttonText": "tamarcgmbh@gmail.com",
+            "href": "mailto:tamarcgmbh@gmail.com"
+        }, {
+            "title": "learn more about St. Peters",
+            "buttonText": "visitstpeters.com",
+            "href": "https://www.visitstpeters.com"
+        }
+    ],
+    
+    "Location": [
+        {"type": "map"},
+        {
+            "src": "https://maps.co/embed/5fef618547e0c9722789384d85f3",
+            "overlayerTextEnable": "enable zooming by clicking",
+            "overlayerTextDisable": "disable zooming by clicking here"
+        }
+    ]
+}
