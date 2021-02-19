@@ -1,4 +1,4 @@
-import readFilePromise from "./JSONReader.js"
+import { readFilePromise, copyHtml } from "./persistenceUtil.js"
 import buildList from "../elements/dragNDrop/moveList.js"
 
 /**
@@ -25,7 +25,7 @@ function buildCMS(data) {
 }
 
 function loadContent() {
-   return readFilePromise("../content/data/sections.json").then((data => buildCMS(data)))
+   return readFilePromise("../content/data/sections.json", "application/json").then((data => buildCMS(data)))
 }
 
 

@@ -1,7 +1,10 @@
-function loadHtml(callback, readfile) {   
+/**
+ * loads json files
+ **/
+function loadFile(callback, file, type) {   
     var xobj = new XMLHttpRequest();
-    xobj.overrideMimeType("text/html")
-    xobj.open('GET', readfile, true)
+    xobj.overrideMimeType(type)
+    xobj.open('GET', file, true)
     xobj.onreadystatechange = function () {
         if (xobj.readyState == 4 && xobj.status == "200") {
             callback(xobj.responseText)
@@ -14,25 +17,28 @@ function loadHtml(callback, readfile) {
 }
 
 /**
- * move to json reader
+ * Returns either the File, or a 404 not found
  */
-async function readFilePromise (file) {
+async function readFilePromise (file, type) {
     return new Promise((resolve, reject) => { 
-        loadHtml(function(response) {  
-            try {
+        loadFile(function(response) {  
+            if (type == "text/html") { 
                 resolve(response)
+            }
+            try {
+                resolve(JSON.parse(response))
             } catch(e) {
                 reject(response)
             }
 
-        }, file)
+        }, file, type)
     })  
 }
 
 function copyHtml () {
 
     var ifrm = document.getElementsByTagName("iframe")[0]
-    readFilePromise("../content/index.html").then((fileContent) => {
+    readFilePromise("../content/index.html", "text/html").then((fileContent) => {
 
         let lines = fileContent.split("\n")
         for (let i = 0; i < lines.length; i++) {
@@ -56,5 +62,4 @@ function copyHtml () {
 }
 
 
-export default copyHtml
-
+export { readFilePromise, copyHtml }

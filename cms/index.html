@@ -41,11 +41,11 @@
 <script type="module">
 
     import * as edit from "./js/site.js"
-    import copyHtml from "./js/copyHtml.js"
+    import * as persistenceUtil from "./js/persistenceUtil.js"
 
     edit.loadContent()
 
-    copyHtml("../content/index.html")
+    persistenceUtil.copyHtml("../content/index.html")
     document.getElementsByTagName("iframe")[0].contentWindow.location.reload()
 
 </script>
