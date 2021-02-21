@@ -1,6 +1,6 @@
 {
 
-    "menu": ["Start", "Welcoming", "Location", "Contact"], 
+    "menu": ["Start", "Welcoming", "Contact"], 
 
     "Start": [
         {"type": "slider"},

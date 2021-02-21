@@ -37,6 +37,7 @@ async function readFilePromise (file, type) {
 
 function copyHtml () {
 
+
     var ifrm = document.getElementsByTagName("iframe")[0]
     readFilePromise("../content/index.html", "text/html").then((fileContent) => {
 
@@ -50,7 +51,7 @@ function copyHtml () {
         }
 
         fileContent = fileContent.replaceAll('./factory', '../content/factory')
-        fileContent = fileContent.replaceAll('data = "data/sections.json"', 'data = "./data.json"')
+        fileContent = fileContent.replaceAll('data = "data/sections.json"', 'data = ""')
 
 
         ifrm = ifrm.contentWindow || ifrm.contentDocument.document || ifrm.contentDocument;
@@ -60,6 +61,5 @@ function copyHtml () {
     })
     
 }
-
 
 export { readFilePromise, copyHtml }

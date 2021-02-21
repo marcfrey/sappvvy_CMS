@@ -75,7 +75,7 @@ function addNewItem(text) {
   if (newItem != '') {
     var li = document.createElement('li');
     var attr = document.createAttribute('draggable');
-    var ul = document.querySelector('ul');
+    var ul = document.querySelector('#menu > ul');
     li.className = 'draggable';
     attr.value = 'true';
     li.setAttributeNode(attr);
@@ -85,7 +85,7 @@ function addNewItem(text) {
   } else if (typeof text == "string") {
     var li = document.createElement('li');
     var attr = document.createAttribute('draggable');
-    var ul = document.querySelector('ul');
+    var ul = document.querySelector('#menu > ul');
     li.className = 'draggable';
     attr.value = 'true';
     li.setAttributeNode(attr);

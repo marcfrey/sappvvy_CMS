@@ -1,20 +1,27 @@
 import { initialize, addNewItem, changed, setChanged } from "./dragNDrop.js"
 
-/**
- * - Prüfen ob Typ definiert
- */
-function buildList(data, elementQuery) {
+var items
 
-    let input = document.querySelector(elementQuery + " input")
+function buildList(brick) {
+
+    items = brick.data
+
+    let input = document.querySelector(brick.elementQuery + " input")
     input.addEventListener("keyup", (e) => {
         if (e.key == "Enter") {
-            addNewItem(input.value)
+            let item = input.value
+            addNewItem(item)
+            
+            let data = brick.data
+            data.push(item)
+            brick.changeData(data)            
         }
+        brick.changed = true
     })
 
-    for (let i in data) {
-        let item = addNewItem((parseInt(i)+1) + ": " + data[i])
-        item.appendChild(removeButton(item, elementQuery))
+    for (let i in brick.data) {
+        let item = addNewItem(brick.data[i])
+        item.appendChild(removeButton(item, brick))
     }
 
     initialize()
@@ -22,12 +29,15 @@ function buildList(data, elementQuery) {
     let changeSniffer = () => {
         setTimeout(() => {
             if (changed) {
-                let sections = document.querySelector(elementQuery + " ul").children
+                let data = []
+                let sections = document.querySelector(brick.elementQuery + "> ul").children
                 for (let i in sections) {
                     if (parseInt(i) || i == "0") {
-                        sections[i].appendChild(removeButton(sections[i], elementQuery))
+                        sections[i].appendChild(removeButton(sections[i], brick))
+                        data.push(sections[i].innerText)
                     }
                 }
+                brick.changeData(data)
                 setChanged(false)
             }
             changeSniffer()
@@ -37,8 +47,8 @@ function buildList(data, elementQuery) {
 }
 
 
-let removeButton = (item, elementQuery) => {
-    let sectionList = document.querySelector(elementQuery + " ul")
+let removeButton = (item, brick) => {
+    let sectionList = document.querySelector(brick.elementQuery + "> ul")
     let remove
 
     if (item.getElementsByTagName("div")[0]) {
@@ -46,9 +56,15 @@ let removeButton = (item, elementQuery) => {
     } else {
         remove = document.createElement("div")
     }
-
+   
     remove.addEventListener("click", (e) => {
-        sectionList.removeChild(item)
+        if (sectionList.contains(item)) {
+            let data = brick.data
+            data.pop(item.innerText)
+            brick.changeData(data)
+            items.pop(item.innerText)
+            sectionList.removeChild(item)
+        }
     })
     remove.addEventListener("mouseover", () => {
         item.classList.add("toRemove")

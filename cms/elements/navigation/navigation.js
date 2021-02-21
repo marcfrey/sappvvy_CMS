@@ -33,7 +33,6 @@ function showVisibile() {
 }
 
 function initialize() {
-    
     menu = document.querySelector("nav div")
     for (let i in menu.children) {
         // '0' is not accepted as a number
