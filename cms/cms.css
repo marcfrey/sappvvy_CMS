@@ -68,8 +68,25 @@ p, span, li, a, input:placeholder-shown, input, button {
     color: var(--col2nd);
 }
 
+input {
+    line-height: 19px;
+    outline: 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--col2nd);
+}
+
 button:hover {
     transform: scale(1.1);
+}
+
+.describedInput {
+    display: flex;
+}
+
+.describedInput > * {
+    margin: 0;
+    flex-basis: 50%;
 }
 
 /**
@@ -128,13 +145,6 @@ button:hover {
 }
 
 
-.selectMove input {
-    line-height: 19px;
-    outline: 0;
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid var(--col2nd);
-}
 
 .selectMove .add {
     right: 0;
@@ -212,3 +222,21 @@ generate button
     box-shadow: 0px 0px 5px 5px white;
     transition: all .5s;
 }
+
+/**
+    Slider template
+*/
+body > .slider h2 input {
+    background: none;
+    border: none;
+    line-height: inherit;
+    font-size: inherit;
+    outline: 0;
+}
+
+body > .slider .heading > span {
+    color: white;
+    margin: -20px 0 20px;
+    display: block;
+}
+

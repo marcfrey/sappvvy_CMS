@@ -4,6 +4,8 @@ var items
 
 function buildList(brick) {
 
+    console.log(brick)
+
     items = brick.data
 
     let input = document.querySelector(brick.elementQuery + " input")

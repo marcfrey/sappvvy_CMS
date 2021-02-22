@@ -3,50 +3,72 @@ import buildList from "../elements/dragNDrop/moveList.js"
 import generateDropDown from "../elements/dropDown/dropDown.js"
 
 var dynamicDataFile = "./data.json"
-var dataID = "dynamicJSONdata"
 var bricks = []
 
 
 
 class Brick {
-    constructor(name) {
+    constructor(name, type) {
         this.name = name
         this.changed = false
         this.elementQuery = "#" + name
-        this.data = getJson()[name]
+        this.data = getJSONDataFromLocalStorage()[name]
         bricks.push(this)
-        buildList(this)
+        if (!type) {
+            this.type = type
+        }         
     }
 
     changeData = (data) => {
         this.data = data
         this.changed = true
                 
-        let dynamicData = getJson(dataID)
+        let dynamicData = getJSONDataFromLocalStorage(dataID)
         dynamicData[this.name] = data
-        localStorage.setItem(dataID, JSON.stringify(dynamicData))
+        setJSONDataFromLocalStorage(dynamicData)
     }
 }
 
-/**
- * - Prüfen ob Typ definiert
- */
-function buildCMS(data) {
+function createSliderManager(brick) {
+    let sliderManager = generateHtml("div", {class: "slider"})
+    let headings = generateHtml("div", {class: "heading"})
+    headings.appendChild(generateHtml("h2", {}, brick.name))
+    headings.appendChild(generateHtml("span", {}, "type: slider"))
     
-    let menu = document.querySelector("#menu > div")
+    headings.appendChild(getInputWithDescription("bigger headline", brick.data[1].h1))
+    headings.appendChild(getInputWithDescription("smaller headline", brick.data[1].h2))
+    
+    sliderManager.appendChild(headings)
+    document.body.appendChild(sliderManager)
 
-    var elementTypes = Object.keys(data)
+}
+
+let getInputWithDescription = (description, content) => {
+    let describedInput = generateHtml("div", {class: "describedInput"})
+    describedInput.appendChild(generateHtml("span", {}, description))
+
+    let input = generateHtml("input", {placeholder: "enter a headline"})
+    input.value = content
+    describedInput.appendChild(input)
+
+    return describedInput
+}
+
+function buildCMS(data) {
+    setJSONDataFromLocalStorage(data)
+
+    let menu = document.querySelector("#menu > div")
+    let elementTypes = Object.keys(data)
     elementTypes.shift()
     menu.appendChild(generateDropDown(elementTypes))
 
-    localStorage.setItem(dataID, JSON.stringify(data))
+    buildList(new Brick("menu"))
 
-    new Brick("menu")
+    createSliderManager(new Brick("Start", "slider")) 
 
-
-    // sections
     for (let i in data) {
         if (data[i][0].type) {
+            new Brick(i, data[i][0].type)
             let sectionTemplate = document.createElement("div")
             sectionTemplate.setAttribute("id", i)
             let title = document.createElement("h2")
@@ -77,10 +99,17 @@ function loadContent() {
    return readFilePromise(dynamicDataFile, "application/json").then((data => buildCMS(data)))
 }
 
-function getJson () {
+// refactor to persistence and rename to localStorageData
+var dataID = "dynamicJSONdata"
+
+function getJSONDataFromLocalStorage () {
     return JSON.parse(localStorage.getItem(dataID))
 }
 
-export { generateHtml, loadContent, getJson, dataID, bricks }
+function setJSONDataFromLocalStorage (content) {
+    localStorage.setItem(dataID, JSON.stringify(content))
+}
+
+export { generateHtml, loadContent, getJSONDataFromLocalStorage as getJson, dataID, bricks }
 
  
