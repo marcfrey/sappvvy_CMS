@@ -103,7 +103,7 @@ button:hover {
 }
 
 
-.selectMove li.draggable {
+li.draggable {
     display: inline-block;
     line-height: 20px;
     position: relative;
@@ -118,11 +118,11 @@ button:hover {
 
 }
 
-.selectMove li.draggable:hover {
+#menu li.draggable:hover {
     transform: scale(1.2);
 }
 
-.selectMove li.draggable div {
+li.draggable div {
     position: absolute;
     background: url("./icons/cancel.png");
     background-size: 80%;
@@ -135,16 +135,14 @@ button:hover {
     right: 20px;
 }
 
-.selectMove li.draggable.toRemove {
+li.draggable.toRemove {
     background-color: crimson;
     background-image: none;
 }
 
-#menu ul .draggable.toRemove:after {
+ul .draggable.toRemove:after {
     content: 'delete me';
 }
-
-
 
 .selectMove .add {
     right: 0;
@@ -240,3 +238,28 @@ body > .slider .heading > span {
     display: block;
 }
 
+
+
+/****************************************
+tryout
+***/
+
+#slider .content {
+    padding: 20px;
+    background: var(--col4th);
+    margin: 20px;
+}
+
+#slider .content h3 {
+    margin: 0;
+}
+
+#slider button {
+    background: var(--col3rd);
+    border: 0;
+    padding: 5px 20px;
+    display: block;
+    margin: 0 auto;
+    transition: all .5s;
+    cursor: pointer;
+}

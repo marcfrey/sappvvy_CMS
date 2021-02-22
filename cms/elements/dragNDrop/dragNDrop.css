@@ -1,13 +1,13 @@
 /* Code By Webdevtrick ( https://webdevtrick.com ) */
 
-#menu ul .draggable {
+ul .draggable {
   will-change: transform;
   cursor: move;
   user-select: none;
   position: relative;
 }
 
-#menu ul .draggable:after {
+ul .draggable:after {
   content: 'drag me';
   right: 60px;
   font-size: 10px;
@@ -22,11 +22,11 @@
 
 }
 
-#menu ul .draggable:hover:after {
+ul .draggable:hover:after {
   opacity: 1;
   transform: translate(0);
 }
 
-.over {
+ul .draggable.over {
   transform: scale(1.1, 1.1);
 }

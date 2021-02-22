@@ -5,24 +5,22 @@ import generateDropDown from "../elements/dropDown/dropDown.js"
 var dynamicDataFile = "./data.json"
 var bricks = []
 
-
-
 class Brick {
-    constructor(name, type) {
+    constructor(name, type, listedData) {
         this.name = name
         this.changed = false
         this.elementQuery = "#" + name
         if (this.name == "menu") {
             this.data = getJSONDataFromLocalStorage()[name]
-
         } else {
-            this.data = getJSONDataFromLocalStorage()[type][0]
-
+            this.data = getJSONDataFromLocalStorage()[type][0] // make list listed data for movelist
             this.type = type
         }
-        bricks.push(this)
-        if (!type) {
-        }         
+        if (listedData) {
+            this.listedData = listedData
+        }
+
+        bricks.push(this)    
     }
 
     changeData = (data) => {
@@ -36,16 +34,28 @@ class Brick {
 }
 
 function createSliderManager(brick) {
-    let sliderManager = generateHtml("div", {class: "slider"})
+    let sliderManager = generateHtml("div", {class: "slider", id: brick.name})
     let headings = generateHtml("div", {class: "heading"})
     headings.appendChild(generateHtml("h2", {}, brick.name))
     headings.appendChild(generateHtml("span", {}, "type: slider"))
     headings.appendChild(getInputWithDescription("bigger headline", brick.data.h1))
     headings.appendChild(getInputWithDescription("smaller headline", brick.data.h2))
     
+
     sliderManager.appendChild(headings)
+
+    let bottom = generateHtml("ul", {}, generateHtml("input", {}, generateHtml("button", {class: "add"})))
+    sliderManager.appendChild(bottom)
+
     document.body.appendChild(sliderManager)
 
+    console.log(brick.listedData)
+    // jeweils src auslesen: mit forEach
+
+    let data = []
+    brick.listedData.forEach((entry) => data.push(entry.img.src))
+    brick.listedData = data
+    buildList(brick) 
 }
 
 let getInputWithDescription = (description, content) => {
@@ -76,23 +86,11 @@ function buildCMS(data) {
 
     buildList(new Brick("menu", "menu"))
 
-    createSliderManager(new Brick("Start", "slider")) 
 
-    /*for (let i in data) {
-        if (data[i][0].type) {
-            new Brick(i, data[i][0].type)
-            let sectionTemplate = document.createElement("div")
-            sectionTemplate.setAttribute("id", i)
-            let title = document.createElement("h2")
-            title.innerHTML = "template: " + i
-            sectionTemplate.appendChild(title)
+    createSliderManager(new Brick("Start", "slider", data.slider[0].gallery))
 
-            document.body.appendChild(sectionTemplate)
 
-        }
-        
 
-    }*/
 }
 
 function generateHtml (type, attrs, ...children) { 

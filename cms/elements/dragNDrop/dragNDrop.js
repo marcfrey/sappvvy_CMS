@@ -68,31 +68,26 @@ var listItens = document.querySelectorAll('.draggable');
   addEventsDragAndDrop(item);
 });
 
-function addNewItem(text) {
-  var newItem = document.getElementsByTagName('input')[0].value;
-  document.getElementsByTagName('input')[0].value = '';
+function addNewItem(text, query) {
+  var newItem = document.querySelector(query + " input").value;
+  document.querySelector(query + " input").value = '';
+
+  var li = document.createElement('li');
+    var attr = document.createAttribute('draggable');
+    var ul = document.querySelector(query + " > ul");
+    li.className = 'draggable';
+    attr.value = 'true';
+    li.setAttributeNode(attr);
 
   if (newItem != '') {
-    var li = document.createElement('li');
-    var attr = document.createAttribute('draggable');
-    var ul = document.querySelector('#menu > ul');
-    li.className = 'draggable';
-    attr.value = 'true';
-    li.setAttributeNode(attr);
     li.appendChild(document.createTextNode(newItem));
-    ul.appendChild(li);
-    addEventsDragAndDrop(li);
   } else if (typeof text == "string") {
-    var li = document.createElement('li');
-    var attr = document.createAttribute('draggable');
-    var ul = document.querySelector('#menu > ul');
-    li.className = 'draggable';
-    attr.value = 'true';
-    li.setAttributeNode(attr);
     li.appendChild(document.createTextNode(text));
-    ul.appendChild(li);
-    addEventsDragAndDrop(li);
   }
+
+  ul.appendChild(li);
+  addEventsDragAndDrop(li);
+
   changed = true
 
   return li
@@ -100,9 +95,6 @@ function addNewItem(text) {
 
 
 
-function initialize() {
-    var btn = document.querySelector('#menu .add');
-    btn.addEventListener('click', addNewItem);
-}
 
-export { initialize, addNewItem, changed, setChanged }
+
+export { addNewItem, changed, setChanged }
