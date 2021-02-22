@@ -2,18 +2,21 @@
 
     "menu": ["Start", "Welcoming", "Contact"], 
 
-    "Start": [
-        {"type": "slider"},
+    "slider": [
         {
+            "name": "Start",
             "h1": "Hanldey's Island Properties",
-            "h2": "welcome to"
-        }, { "img": {"src": "../content/img/insel-1.jpg"} }, 
-        { "img": {"src": "../content/img/insel-2.jpg"} }
+            "h2": "welcome to",
+            "gallery": [
+                { "img": {"src": "../content/img/insel-1.jpg"} }, 
+                { "img": {"src": "../content/img/insel-2.jpg"} }
+            ]
+        }
     ],
     
-    "Welcoming": [
-        {"type": "text"},
+    "text": [
         {
+            "name": "Welcoming",
             "text": ["Private Island in the Bras d’Or Lake",
                     "with base on land ",
                     "in St. Peters (Cape Breton, Nova Scotia, Canada)"],
@@ -24,22 +27,24 @@
         }
     ], 
 
-    "Contact": [
-        {"type": "link"},
+    "link": [
         {
-            "title": "contact us",
-            "buttonText": "tamarcgmbh@gmail.com",
-            "href": "mailto:tamarcgmbh@gmail.com"
-        }, {
-            "title": "learn more about St. Peters",
-            "buttonText": "visitstpeters.com",
-            "href": "https://www.visitstpeters.com"
+            "name": "Contact",
+            "buttons": [{
+                "title": "contact us",
+                "buttonText": "tamarcgmbh@gmail.com",
+                "href": "mailto:tamarcgmbh@gmail.com"
+            }, {
+                "title": "learn more about St. Peters",
+                "buttonText": "visitstpeters.com",
+                "href": "https://www.visitstpeters.com"
+            }]
         }
     ],
     
-    "Location": [
-        {"type": "map"},
+    "map": [
         {
+            "name": "Location",
             "src": "https://maps.co/embed/5fef618547e0c9722789384d85f3",
             "overlayerTextEnable": "enable zooming by clicking",
             "overlayerTextDisable": "disable zooming by clicking here"

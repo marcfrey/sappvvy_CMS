@@ -12,10 +12,16 @@ class Brick {
         this.name = name
         this.changed = false
         this.elementQuery = "#" + name
-        this.data = getJSONDataFromLocalStorage()[name]
+        if (this.name == "menu") {
+            this.data = getJSONDataFromLocalStorage()[name]
+
+        } else {
+            this.data = getJSONDataFromLocalStorage()[type][0]
+
+            this.type = type
+        }
         bricks.push(this)
         if (!type) {
-            this.type = type
         }         
     }
 
@@ -34,9 +40,8 @@ function createSliderManager(brick) {
     let headings = generateHtml("div", {class: "heading"})
     headings.appendChild(generateHtml("h2", {}, brick.name))
     headings.appendChild(generateHtml("span", {}, "type: slider"))
-    
-    headings.appendChild(getInputWithDescription("bigger headline", brick.data[1].h1))
-    headings.appendChild(getInputWithDescription("smaller headline", brick.data[1].h2))
+    headings.appendChild(getInputWithDescription("bigger headline", brick.data.h1))
+    headings.appendChild(getInputWithDescription("smaller headline", brick.data.h2))
     
     sliderManager.appendChild(headings)
     document.body.appendChild(sliderManager)
@@ -58,15 +63,22 @@ function buildCMS(data) {
     setJSONDataFromLocalStorage(data)
 
     let menu = document.querySelector("#menu > div")
-    let elementTypes = Object.keys(data)
-    elementTypes.shift()
+    let elementTypes = []
+
+    for (let type in data) {
+        data[type].forEach((obj) => {
+            if (obj.name) {
+                elementTypes.push(obj.name)
+            }
+        })
+    }
     menu.appendChild(generateDropDown(elementTypes))
 
-    buildList(new Brick("menu"))
+    buildList(new Brick("menu", "menu"))
 
     createSliderManager(new Brick("Start", "slider")) 
 
-    for (let i in data) {
+    /*for (let i in data) {
         if (data[i][0].type) {
             new Brick(i, data[i][0].type)
             let sectionTemplate = document.createElement("div")
@@ -80,7 +92,7 @@ function buildCMS(data) {
         }
         
 
-    }
+    }*/
 }
 
 function generateHtml (type, attrs, ...children) { 
