@@ -19,6 +19,10 @@ html {
     --col6th: #CE916A;
 }
 
+html * {
+    transition: all .5s;
+}
+
 body {
     width: calc(50% - 40px);
     margin: 0 0 0 50%;
@@ -69,11 +73,20 @@ p, span, li, a, input:placeholder-shown, input, button {
 }
 
 input {
-    line-height: 19px;
+    font-size: 1em;
+    line-height: 31px;
     outline: 0;
     background: transparent;
     border: 0;
     border-bottom: 1px solid var(--col2nd);
+}
+
+button {    
+    background: var(--col3rd);
+    border: 0;
+    padding: 5px 20px;
+    display: block;
+    cursor: pointer;
 }
 
 button:hover {
@@ -107,11 +120,10 @@ li.draggable {
     display: inline-block;
     line-height: 20px;
     position: relative;
-    transition: all .5s;
     width: 100%;
     background-image: none;
     background-color: var(--col2nd);
-    margin: 5px 20px;
+    margin: 5px 0;
     padding: 10px;
     width: calc(100% - 80px);
     color: var(--col3rd);
@@ -146,13 +158,7 @@ ul .draggable.toRemove:after {
 
 .selectMove .add {
     right: 0;
-    border: 0;
-    line-height: 27px;
     position: absolute;
-    padding: 0 20px;
-    cursor: pointer;
-    transition: all .5s;
-    background-color: var(--col3rd);
 }
 
 /**
@@ -168,10 +174,6 @@ ul .draggable.toRemove:after {
 
 .dropDown > ul > li:hover {
     background: var(--col5th);
-}
-
-.dropDown > ul input {
-    transition: all .5s;
 }
 
 .dropDown.noMatch > ul input {
@@ -218,48 +220,136 @@ generate button
     right: 40px;
     top: 20px;
     box-shadow: 0px 0px 5px 5px white;
-    transition: all .5s;
 }
 
 /**
     Slider template
 */
-body > .slider h2 input {
-    background: none;
-    border: none;
-    line-height: inherit;
-    font-size: inherit;
-    outline: 0;
-}
 
-body > .slider .heading > span {
+body > div > span {
     color: white;
-    margin: -20px 0 20px;
     display: block;
 }
 
 
 
-/****************************************
+/***
 tryout
 ***/
 
-#slider .content {
+.content {
     padding: 20px;
-    background: var(--col4th);
-    margin: 20px;
+    background: var(--col3rd);
+    margin: 20px 0;
+    height: auto;
+    opacity: 1;
 }
 
-#slider .content h3 {
+body > div h2 {
     margin: 0;
 }
 
-#slider button {
-    background: var(--col3rd);
-    border: 0;
-    padding: 5px 20px;
-    display: block;
+body > div {
+    position: relative;
+}
+
+body > div > button.add {
     margin: 0 auto;
-    transition: all .5s;
-    cursor: pointer;
+    height: auto;
+    opacity: 1;
+}
+
+.content ul {
+    padding: 0;
+    margin: 40px 0 0;
+}
+
+.content h2 {
+    border-bottom: 1px solid;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.content li {
+    margin: 10px 0;
+}
+
+.content ul > input {
+    width: 80%;
+}
+
+.content ul .inputField {
+    position: relative;
+    width: 50%;
+    min-width: 350px;
+}
+
+.content ul .inputField > * {
+    display: inline-block;
+}
+
+.content ul .inputField input {
+    width: 80%;
+}
+
+.content ul .inputField button {
+    max-width: 20%;
+    position: absolute;
+    right: 0;
+    background: var(--col5th);
+}
+
+body > div > button.toggle {
+    outline: 0;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 20px;
+    transform: translateY(0%);
+    background-image: url("./icons/fullscreen-2.svg");
+    background-size: 50% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+body > div.closed > button.toggle::after {
+    content: "show content";
+}
+
+body > div > button.toggle::after {
+    content: "hide content";
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translateY(-50%);
+    width: 100px;
+}
+
+body > div:hover > button.toggle::after {
+    opacity: 1;
+}
+
+
+body > div.closed > button.toggle {
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url("./icons/fullscreen-1.svg");
+}
+
+.closed .content,
+.closed > button.add,
+.closed .content > * {
+    height: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+}
+
+
+/*text*/
+#text .content > div > ul,
+#text .content > h3 {
+    margin: 0;
 }

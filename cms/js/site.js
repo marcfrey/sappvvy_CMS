@@ -1,8 +1,8 @@
 import { readFilePromise, copyHtml } from "./persistenceUtil.js"
-import buildList from "../elements/dragNDrop/moveList.js"
-import generateDropDown from "../elements/dropDown/dropDown.js"
+import * as elements from "./cmsElements.js"
 
 var dynamicDataFile = "./data.json"
+//var dynamicDataFile = "../../content/data/sections.json"
 var bricks = []
 
 class Brick {
@@ -26,71 +26,49 @@ class Brick {
     changeData = (data) => {
         this.data = data
         this.changed = true
-                
+        
         let dynamicData = getJSONDataFromLocalStorage(dataID)
         dynamicData[this.name] = data
         setJSONDataFromLocalStorage(dynamicData)
     }
 }
 
-function createSliderManager(brick) {
-    let sliderManager = generateHtml("div", {class: "slider", id: brick.name})
-    let headings = generateHtml("div", {class: "heading"})
-    headings.appendChild(generateHtml("h2", {}, brick.name))
-    headings.appendChild(generateHtml("span", {}, "type: slider"))
-    headings.appendChild(getInputWithDescription("bigger headline", brick.data.h1))
-    headings.appendChild(getInputWithDescription("smaller headline", brick.data.h2))
-    
-
-    sliderManager.appendChild(headings)
-
-    let bottom = generateHtml("ul", {}, generateHtml("input", {}, generateHtml("button", {class: "add"})))
-    sliderManager.appendChild(bottom)
-
-    document.body.appendChild(sliderManager)
-
-    console.log(brick.listedData)
-    // jeweils src auslesen: mit forEach
-
-    let data = []
-    brick.listedData.forEach((entry) => data.push(entry.img.src))
-    brick.listedData = data
-    buildList(brick) 
-}
-
-let getInputWithDescription = (description, content) => {
-    let describedInput = generateHtml("div", {class: "describedInput"})
-    describedInput.appendChild(generateHtml("span", {}, description))
-
-    let input = generateHtml("input", {placeholder: "enter a headline"})
-    input.value = content
-    describedInput.appendChild(input)
-
-    return describedInput
-}
-
 function buildCMS(data) {
     setJSONDataFromLocalStorage(data)
 
-    let menu = document.querySelector("#menu > div")
-    let elementTypes = []
+    for (let element in data) {
+        if (element == "menu") {
+            elements.createSectionManager("#menu > div", new Brick(element, element), data)
+        } else {
+            for (let i = 0; i < data[element].length; i++) {
+                if (i == 0) {
+                    let typeContainer = generateHtml("div", {id: element, class: "closed"})
+                    typeContainer.appendChild(generateHtml("h2", {}, element))
+                    typeContainer.appendChild(generateHtml("span", {}, "edit content of type " + element))
+                    typeContainer.appendChild(generateHtml("button", {class: "add"}, "add new " + element))
+                    let toggleButton = generateHtml("button", {class: "toggle"})
+                    toggleButton.addEventListener("click", () => {
+                        if(typeContainer.classList.contains("closed")) {
+                            typeContainer.classList.remove("closed")
+                        } else {
+                            typeContainer.classList.add("closed")
+                        }
+                    })
+                    typeContainer.appendChild(toggleButton)
+                    document.body.appendChild(typeContainer)
+                }
+                switch(element) {
+                    case "slider":
+                        elements.createSliderManager(new Brick(data[element][i].name, element, data.slider[i].gallery)) 
+                        break
+                    case "text":
+                        elements.createTextManager(new Brick(data[element][i].name, element, data.text[i]))
+                    
+                }
 
-    for (let type in data) {
-        data[type].forEach((obj) => {
-            if (obj.name) {
-                elementTypes.push(obj.name)
             }
-        })
+        }
     }
-    menu.appendChild(generateDropDown(elementTypes))
-
-    buildList(new Brick("menu", "menu"))
-
-
-    createSliderManager(new Brick("Start", "slider", data.slider[0].gallery))
-
-
-
 }
 
 function generateHtml (type, attrs, ...children) { 

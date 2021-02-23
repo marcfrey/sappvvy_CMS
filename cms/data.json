@@ -11,6 +11,13 @@
                 { "img": {"src": "../content/img/insel-1.jpg"} }, 
                 { "img": {"src": "../content/img/insel-2.jpg"} }
             ]
+        }, {
+            "name": "jbl",
+            "h1": "Hanldey's Island Properties",
+            "gallery": [
+                { "img": {"src": "../content/img/insel-5.jpg"} }, 
+                { "img": {"src": "../content/img/insel-6.jpg"} }
+            ]
         }
     ],
     
@@ -24,6 +31,9 @@
                 {"src":  "../content/img/icons/map_novascotia.png"},
                 {"src":  "../content/img/icons/map_canada.png"}
             ]
+        }, {
+            "name": "hello",
+            "text": ["i call myself a man of culture"]
         }
     ], 
 
