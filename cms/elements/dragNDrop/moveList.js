@@ -1,15 +1,16 @@
-import { addNewItem, changed, setChanged } from "./dragNDrop.js"
+import { addNewItem, changedList, resetChanged } from "./dragNDrop.js"
 
 var items = []
-let listData = []
+let listData = [] // als map mit query als key
+let lists = new Map()
 
 function buildList(brick, query) {
     
     items = brick.data
     listData = (brick.listedData) ? brick.listedData : brick.data
+    lists.set(query, brick)    
 
     var btn = document.querySelector(query + " .add");
-    console.log(query)
 
     btn.addEventListener('click', () => {
         addNewItem(btn.value, query)
@@ -27,9 +28,9 @@ function buildList(brick, query) {
             
             let data = listData
             data.push(item)
-            brick.changeData(data)            
+            brick.changeData(data)  
+            brick.changed = true          
         }
-        brick.changed = true
     })
 
     for (let i in listData) {
@@ -39,20 +40,43 @@ function buildList(brick, query) {
 
     let changeSniffer = () => {
         setTimeout(() => {
-            if (changed) {
+            if (changedList) {
                 let data = []
-                let sections = document.querySelector(query + " > ul").children
-                for (let i in sections) {
-                    if (parseInt(i) || i == "0") {
-                        sections[i].appendChild(removeButton(sections[i], brick, query))
-                        data.push(sections[i].innerText)
+                for (var [key, value] of lists) {
+                    if (changedList == value.name) {
+                        switch (value.type) {
+                            case "menu" || "slider":
+                                let items = document.querySelectorAll(key + " > ul li")
+                                for (let i in items) {
+                                    if (parseInt(i) || i == "0") {
+                                        console.log(brick)
+                                        items[i].appendChild(removeButton(items[i], value, key))
+                                        data.push(items[i].innerText)
+                                    }
+                                }
+                                value.changeData(data)
+                                break
+
+                            case "text":
+                                let texts = document.querySelectorAll(key + " > ul li")
+                                for (let i in texts) {
+                                    if (parseInt(i) || i == "0") {
+                                        texts[i].appendChild(removeButton(texts[i], value, key))
+                                        data.push(texts[i].innerText)
+                                    }
+                                }
+                                value.changeData(data, "text")
+                                break
+                            
+                        } 
+                        resetChanged()
                     }
                 }
-                brick.changeData(data)
-                setChanged(false)
+            } else {
+                // check for each
             }
             changeSniffer()
-        }, 2000)
+        }, 10)
     }
     changeSniffer()
 }
@@ -70,8 +94,12 @@ let removeButton = (item, brick, query) => {
    
     remove.addEventListener("click", (e) => {
         if (sectionList.contains(item)) {
-            let data = listData
+            console.log(query)
+            console.log(lists)
+            console.log(lists.get(query))
+            let data = (lists.get(query).listedData) ? lists.get(query).listedData : lists.get(query).data
             data.pop(item.innerText)
+            console.log(data)
             brick.changeData(data)
             sectionList.removeChild(item)
         }

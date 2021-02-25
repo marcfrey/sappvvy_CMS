@@ -67,8 +67,29 @@ function createTextManager(brick) {
 }
 
 function createLinkManager(brick) {
-    let linkManager = site.generateHtml("div", {class: "content", id: brick.name})
+    let linkManager = site.generateHtml("div", {class: "content", id: brick.name}) // refactor
+    
+    linkManager.appendChild(site.generateHtml("h2", {}, brick.name))
+    
+    for (let i = 0; i < brick.listedData.length; i++) {
+        linkManager.appendChild(site.generateHtml("h3", {}, "Button " + (i+1)))
+        linkManager.appendChild(getInputWithDescription("title", brick.listedData[i].title))
+        linkManager.appendChild(getInputWithDescription("text in button", brick.listedData[i].buttonText))
+        linkManager.appendChild(getInputWithDescription("link", brick.listedData[i].href))
+    }
+    document.getElementById("link").appendChild(linkManager)
 
+}
+
+function createMapManager(brick) {
+    let mapManager = site.generateHtml("div", {class: "content", id: brick.name})
+    
+    mapManager.appendChild(site.generateHtml("h2", {}, brick.name))
+    mapManager.appendChild(getInputWithDescription("source", brick.listedData.src))
+    mapManager.appendChild(getInputWithDescription("overlayer text enabled", brick.listedData.overlayerTextEnable))
+    mapManager.appendChild(getInputWithDescription("overlayer text disabled", brick.listedData.overlayerTextDisable))
+    
+    document.getElementById("map").appendChild(mapManager)
 }
 
 let getInputWithButton = (placeholder, className) => {
@@ -87,4 +108,4 @@ let getInputWithDescription = (description, content) => {
     return describedInput
 }
 
-export { createSectionManager, createSliderManager, createTextManager }
+export { createSectionManager, createSliderManager, createTextManager, createLinkManager, createMapManager }

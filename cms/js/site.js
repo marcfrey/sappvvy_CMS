@@ -10,11 +10,12 @@ class Brick {
         this.name = name
         this.changed = false
         this.elementQuery = "#" + name
+        this.type = type
         if (this.name == "menu") {
             this.data = getJSONDataFromLocalStorage()[name]
         } else {
             this.data = getJSONDataFromLocalStorage()[type][0] // make list listed data for movelist
-            this.type = type
+            
         }
         if (listedData) {
             this.listedData = listedData
@@ -23,13 +24,42 @@ class Brick {
         bricks.push(this)    
     }
 
-    changeData = (data) => {
+    changeData = (data, subsection) => {   /// refactor to changeListData
         this.data = data
         this.changed = true
         
         let dynamicData = getJSONDataFromLocalStorage(dataID)
-        dynamicData[this.name] = data
+        if (dynamicData[this.name]) {
+            dynamicData[this.name] = data
+        } else {
+            for (let i = 0; i < dynamicData[this.type].length; i++) {
+                if (dynamicData[this.type][i].name == this.name) {
+                    switch (this.type) {
+                        case "slider":
+                            for (let k = 0; k < data.length; k++) {
+                                if (dynamicData[this.type][i].gallery[k]) {
+                                    dynamicData[this.type][i].gallery[k].img.src = data[k]
+                                } else {
+                                    dynamicData[this.type][i].gallery.push({img: {src: data[k]}})
+                                }
+                            }
+                            break
+                        case "text":
+                            console.log(data)
+                            if (subsection == "text") {
+                                dynamicData[this.type][i].text = data
+                            }
+                            
+                            break
+
+                    }
+
+                }
+            }
+        }
         setJSONDataFromLocalStorage(dynamicData)
+
+        //console.log(getJSONDataFromLocalStorage(dataID))
     }
 }
 
@@ -63,7 +93,12 @@ function buildCMS(data) {
                         break
                     case "text":
                         elements.createTextManager(new Brick(data[element][i].name, element, data.text[i]))
-                    
+                        break
+                    case "link":
+                        elements.createLinkManager(new Brick(data[element][i].name, element, data.link[i].buttons))
+                        break
+                    case "map":
+                        elements.createMapManager(new Brick(data[element][i].name, element, data.map[i]))
                 }
 
             }

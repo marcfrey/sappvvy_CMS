@@ -6,8 +6,8 @@
 
  // Code By Webdevtrick ( https://webdevtrick.com )
 
-var changed = false
-var setChanged = (bool) => {changed = bool}
+var changedList = null
+var resetChanged = () => {changedList = null}
 var dragSrcEl
 
 function dragStart(e) {
@@ -49,7 +49,21 @@ function dragEnd(e) {
     
     this.style.opacity = '1';
 
-    changed = true
+    let elementId = ""
+    let parent = e.target.parentNode
+
+    while (elementId == "") {
+        if (parent.localName == "body") {
+            continue
+        }
+        if (parent.id) {
+            elementId = parent.id
+        } else {
+            parent = parent.parentNode
+        }
+    }
+
+    changedList = elementId
 }
 
 function addEventsDragAndDrop(el) {
@@ -86,7 +100,7 @@ function addNewItem(text, query) {
     ul.appendChild(li);
     addEventsDragAndDrop(li);
 
-    changed = true
+    changedList = query.split(" ")[0].substring(1)
 
     return li
 }
@@ -95,4 +109,4 @@ function addNewItem(text, query) {
 
 
 
-export { addNewItem, changed, setChanged }
+export { addNewItem, changedList, resetChanged }
