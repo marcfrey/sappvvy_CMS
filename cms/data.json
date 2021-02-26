@@ -58,6 +58,12 @@
             "src": "https://maps.co/embed/5fef618547e0c9722789384d85f3",
             "overlayerTextEnable": "enable zooming by clicking",
             "overlayerTextDisable": "disable zooming by clicking here"
+        }, {
+            "name": "Abtwil",
+            "src": "https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10799.743228484882!2d9.329049600000001!3d47.41319325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2sch!4v1614253878893!5m2!1sde!2sch",
+            "overlayerTextEnable": "overlay entfernen",
+            "overlayerTextDisable": "disable zooming by clicking here"
         }
+
     ]
 }

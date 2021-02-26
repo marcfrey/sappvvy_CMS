@@ -1,6 +1,6 @@
 import * as site from "./site.js"
 import generateDropDown from "../elements/dropDown/dropDown.js"
-import buildList from "../elements/dragNDrop/moveList.js"
+import { buildList, removeButton, lists } from "../elements/dragNDrop/moveList.js"
 
 function createSectionManager(query, brick, data) {
     
@@ -25,8 +25,8 @@ function createSliderManager(brick) {
     let sliderManager = site.generateHtml("div", {class: "content", id: brick.name})
     let headings = site.generateHtml("div", {class: "heading"})
     headings.appendChild(site.generateHtml("h2", {}, brick.name))
-    headings.appendChild(getInputWithDescription("bigger headline", brick.data.h1))
-    headings.appendChild(getInputWithDescription("smaller headline", brick.data.h2))
+    headings.appendChild(getInputWithDescription("h1", brick.data.h1, "bigger headline"))
+    headings.appendChild(getInputWithDescription("h2", brick.data.h2, "smaller headline"))
     
 
     sliderManager.appendChild(headings)
@@ -74,7 +74,7 @@ function createLinkManager(brick) {
     for (let i = 0; i < brick.listedData.length; i++) {
         linkManager.appendChild(site.generateHtml("h3", {}, "Button " + (i+1)))
         linkManager.appendChild(getInputWithDescription("title", brick.listedData[i].title))
-        linkManager.appendChild(getInputWithDescription("text in button", brick.listedData[i].buttonText))
+        linkManager.appendChild(getInputWithDescription("text", brick.listedData[i].buttonText, "text in button"))
         linkManager.appendChild(getInputWithDescription("link", brick.listedData[i].href))
     }
     document.getElementById("link").appendChild(linkManager)
@@ -85,10 +85,10 @@ function createMapManager(brick) {
     let mapManager = site.generateHtml("div", {class: "content", id: brick.name})
     
     mapManager.appendChild(site.generateHtml("h2", {}, brick.name))
-    mapManager.appendChild(getInputWithDescription("source", brick.listedData.src))
-    mapManager.appendChild(getInputWithDescription("overlayer text enabled", brick.listedData.overlayerTextEnable))
-    mapManager.appendChild(getInputWithDescription("overlayer text disabled", brick.listedData.overlayerTextDisable))
-    
+    mapManager.appendChild(getInputWithDescription("src", brick.listedData.src, "source"))
+    mapManager.appendChild(getInputWithDescription("overlayerTextEnable", brick.listedData.overlayerTextEnable, "overlayer text enabled"))
+    mapManager.appendChild(getInputWithDescription("overlayerTextDisable", brick.listedData.overlayerTextDisable, "overlayer text disabled"))
+
     document.getElementById("map").appendChild(mapManager)
 }
 
@@ -99,12 +99,17 @@ let getInputWithButton = (placeholder, className) => {
     return site.generateHtml("div", {class: className}, site.generateHtml("ul", {}, inputFieldImg))
 }
 
-let getInputWithDescription = (description, content) => {
+let getInputWithDescription = (jsonReference, content, description) => {
     let describedInput = site.generateHtml("div", {class: "describedInput"})
-    describedInput.appendChild(site.generateHtml("span", {}, description))
-    let input = site.generateHtml("input", {placeholder: "enter a headline"})
+    if (description) {
+        describedInput.appendChild(site.generateHtml("span", {}, description))
+    } else {
+        describedInput.appendChild(site.generateHtml("span", {}, jsonReference))
+    }
+    let input = site.generateHtml("input", {placeholder: "enter content", class: jsonReference})
     input.value = content
     describedInput.appendChild(input)
+
     return describedInput
 }
 

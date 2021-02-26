@@ -1,5 +1,8 @@
-import { readFilePromise, copyHtml } from "./persistenceUtil.js"
+import * as persistence from "./persistenceUtil.js"
 import * as elements from "./cmsElements.js"
+import * as brickClasses from "./brick.js"
+import * as dragNDrop from "../elements/dragNDrop/dragNDrop.js"
+import { removeButton, lists } from "../elements/dragNDrop/moveList.js"
 
 var dynamicDataFile = "./data.json"
 //var dynamicDataFile = "../../content/data/sections.json"
@@ -8,13 +11,13 @@ var bricks = []
 class Brick {
     constructor(name, type, listedData) {
         this.name = name
-        this.changed = false
+        this.changed = null
         this.elementQuery = "#" + name
         this.type = type
         if (this.name == "menu") {
-            this.data = getJSONDataFromLocalStorage()[name]
+            this.data = persistence.getLocalJSON()[name]
         } else {
-            this.data = getJSONDataFromLocalStorage()[type][0] // make list listed data for movelist
+            this.data = persistence.getLocalJSON()[type][0] // make list listed data for movelist
             
         }
         if (listedData) {
@@ -24,47 +27,56 @@ class Brick {
         bricks.push(this)    
     }
 
-    changeData = (data, subsection) => {   /// refactor to changeListData
+    updateData = (data, subsection) => { 
         this.data = data
-        this.changed = true
+        this.changed = "listChange"
         
-        let dynamicData = getJSONDataFromLocalStorage(dataID)
+        let dynamicData = persistence.getLocalJSON()
         if (dynamicData[this.name]) {
             dynamicData[this.name] = data
         } else {
-            for (let i = 0; i < dynamicData[this.type].length; i++) {
-                if (dynamicData[this.type][i].name == this.name) {
-                    switch (this.type) {
-                        case "slider":
-                            for (let k = 0; k < data.length; k++) {
-                                if (dynamicData[this.type][i].gallery[k]) {
-                                    dynamicData[this.type][i].gallery[k].img.src = data[k]
-                                } else {
-                                    dynamicData[this.type][i].gallery.push({img: {src: data[k]}})
-                                }
-                            }
-                            break
-                        case "text":
-                            console.log(data)
-                            if (subsection == "text") {
-                                dynamicData[this.type][i].text = data
-                            }
-                            
-                            break
-
+            let i = this.getIndexOfBrick()
+            switch (this.type) {
+                case "slider":
+                    for (let k = 0; k < data.length; k++) {
+                        if (dynamicData[this.type][i].gallery[k]) {
+                            dynamicData[this.type][i].gallery[k].img.src = data[k]
+                        } else {
+                            dynamicData[this.type][i].gallery.push({img: {src: data[k]}})
+                        }
                     }
-
-                }
+                    break
+                case "text":
+                    if (subsection == "text") {
+                        dynamicData[this.type][i].text = data
+                    } 
+                    if (subsection == "image") {
+                        // implement
+                    }
+                    break
             }
+                    
         }
-        setJSONDataFromLocalStorage(dynamicData)
+        persistence.setLocalJSON(dynamicData)
+    }
 
-        //console.log(getJSONDataFromLocalStorage(dataID))
+    newInput = (jsonQuery, text) => {
+        let dynamicData = persistence.getLocalJSON()
+        dynamicData[this.type][this.getIndexOfBrick()][jsonQuery] = text
+        persistence.setLocalJSON(dynamicData)
+    }
+
+    getIndexOfBrick = () => {
+        let dynamicData = persistence.getLocalJSON()
+        for (let i = 0; i < dynamicData[this.type].length; i++) {
+            if (dynamicData[this.type][i].name == this.name) return i
+        }
+        return -1
     }
 }
 
 function buildCMS(data) {
-    setJSONDataFromLocalStorage(data)
+    persistence.setLocalJSON(data)
 
     for (let element in data) {
         if (element == "menu") {
@@ -90,6 +102,7 @@ function buildCMS(data) {
                 switch(element) {
                     case "slider":
                         elements.createSliderManager(new Brick(data[element][i].name, element, data.slider[i].gallery)) 
+                        new brickClasses.Slider(data[element][i].name, element, data.slider[i].gallery)
                         break
                     case "text":
                         elements.createTextManager(new Brick(data[element][i].name, element, data.text[i]))
@@ -102,8 +115,58 @@ function buildCMS(data) {
                 }
 
             }
+
         }
     }
+}
+
+function updateIframeOnChange() {
+    bricks.forEach((brick) => {
+        document.querySelectorAll(brick.elementQuery + " .describedInput input").forEach((entry) => {
+            entry.addEventListener("input", (e) => {
+                brick.changed = e.target.classList[0]
+                brick.newInput(e.target.classList[0], e.target.value)
+            })
+        })
+    })
+
+    let listChangeSniffer = () => {
+        setTimeout(() => {
+            if (dragNDrop.changedList) {
+                let data = []
+                for (var [key, value] of lists) {
+                    if (dragNDrop.changedList == value.name) {
+                        switch (value.type) {
+                            case "menu" || "slider":
+                                let items = document.querySelectorAll(key + " > ul li")
+                                for (let i in items) {
+                                    if (parseInt(i) || i == "0") {
+                                        items[i].appendChild(removeButton(items[i], value, key))
+                                        data.push(items[i].innerText)
+                                    }
+                                }
+                                value.updateData(data)
+                                break
+
+                            case "text":
+                                let texts = document.querySelectorAll(key + " > ul li")
+                                for (let i in texts) {
+                                    if (parseInt(i) || i == "0") {
+                                        texts[i].appendChild(removeButton(texts[i], value, key))
+                                        data.push(texts[i].innerText)
+                                    }
+                                }
+                                value.updateData(data, "text")
+                                break
+                        } 
+                        dragNDrop.resetChanged()
+                    }
+                }
+            }   
+            listChangeSniffer()
+        }, 10)
+    }
+    listChangeSniffer()
 }
 
 function generateHtml (type, attrs, ...children) { 
@@ -119,20 +182,12 @@ function generateHtml (type, attrs, ...children) {
 } 
 
 function loadContent() {
-   return readFilePromise(dynamicDataFile, "application/json").then((data => buildCMS(data)))
+    return persistence.readFilePromise(dynamicDataFile, "application/json").then((data) => {
+       buildCMS(data)
+       updateIframeOnChange()
+    })
 }
 
-// refactor to persistence and rename to localStorageData
-var dataID = "dynamicJSONdata"
-
-function getJSONDataFromLocalStorage () {
-    return JSON.parse(localStorage.getItem(dataID))
-}
-
-function setJSONDataFromLocalStorage (content) {
-    localStorage.setItem(dataID, JSON.stringify(content))
-}
-
-export { generateHtml, loadContent, getJSONDataFromLocalStorage as getJson, dataID, bricks }
+export { generateHtml, loadContent, bricks }
 
  

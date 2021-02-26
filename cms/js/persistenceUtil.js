@@ -35,9 +35,10 @@ async function readFilePromise (file, type) {
     })  
 }
 
+/**
+ * copies html
+ */
 function copyHtml () {
-
-
     var ifrm = document.getElementsByTagName("iframe")[0]
     readFilePromise("../content/index.html", "text/html").then((fileContent) => {
 
@@ -59,7 +60,13 @@ function copyHtml () {
         ifrm.document.write(fileContent);
         ifrm.document.close();
     })
-    
 }
 
-export { readFilePromise, copyHtml }
+/**
+ * setter and getter for JSON-Object on localStorage
+ */
+var dataID = "dynamicJSONdata"
+function getLocalJSON () { return JSON.parse(localStorage.getItem(dataID)) }
+function setLocalJSON (content) { localStorage.setItem(dataID, JSON.stringify(content)) }
+
+export { readFilePromise, copyHtml, getLocalJSON, setLocalJSON }
